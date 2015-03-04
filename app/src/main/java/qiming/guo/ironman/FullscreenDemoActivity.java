@@ -19,6 +19,7 @@ package qiming.guo.ironman;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -54,10 +55,12 @@ public class FullscreenDemoActivity extends YouTubeFailureRecoveryActivity imple
 
     private LinearLayout baseLayout;
     private YouTubePlayerView playerView;
+    private HistogramView histoView;
     private YouTubePlayer player;
     private Button fullscreenButton;
     private CompoundButton checkbox;
     private View otherViews;
+    private View rootView;
     private Button cap_button;
 
     private boolean fullscreen;
@@ -67,11 +70,13 @@ public class FullscreenDemoActivity extends YouTubeFailureRecoveryActivity imple
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.fullscreen_demo);
-        baseLayout = (LinearLayout) findViewById(R.id.layout);
+        baseLayout = (LinearLayout) findViewById(R.id.flayout);
         playerView = (YouTubePlayerView) findViewById(R.id.player);
+        histoView = (HistogramView) findViewById(R.id.hist);
         fullscreenButton = (Button) findViewById(R.id.fullscreen_button);
         checkbox = (CompoundButton) findViewById(R.id.landscape_fullscreen_checkbox);
         otherViews = findViewById(R.id.other_views);
+        rootView = (View) findViewById(R.id.flayout);
         cap_button = (Button) findViewById(R.id.capture_buton);
 
         checkbox.setOnCheckedChangeListener(this);
@@ -84,16 +89,21 @@ public class FullscreenDemoActivity extends YouTubeFailureRecoveryActivity imple
             @Override
             public void onClick(View v) {
                 // Perform action on click
-                playerView.setDrawingCacheEnabled(true);
-                playerView.buildDrawingCache();
-                Bitmap bitmap = playerView.getDrawingCache();
+                rootView.setDrawingCacheEnabled(true);
+                rootView.buildDrawingCache();
+                Bitmap bitmap = rootView.getDrawingCache();
                 ByteBuffer buffer1 = ByteBuffer.allocate(bitmap.getHeight() * bitmap.getRowBytes());
                 bitmap.copyPixelsToBuffer(buffer1);
+                int pixel =  bitmap.getPixel(100,100);
+                histoView.invalidate();
+                histoView.setBitmap(bitmap);
                 if (bitmap != null) {
                     Log.d("Capture","Captured successd.");
                 } else {
                     Log.d("Capture","Captured failed.");
                 }
+                //rootView.setDrawingCacheEnabled(false);
+                //rootView.setDrawingCacheEnabled(false);
 
             }
         });

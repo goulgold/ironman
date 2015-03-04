@@ -37,6 +37,17 @@
             <meta-data android:name="@string/isLaunchableActivity" android:value="true"/>
         </activity>
 
+        <activity android:name=".SearchActivity"
+            android:screenOrientation="landscape">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".PlayerActivity"
+            android:screenOrientation="landscape" />
+
     </application>
 
 </manifest>

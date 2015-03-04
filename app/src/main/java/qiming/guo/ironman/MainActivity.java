@@ -1,6 +1,5 @@
 package qiming.guo.ironman;
 
-import android.content.ComponentName;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -19,6 +18,7 @@ public class MainActivity extends ActionBarActivity {
 
         final Button full_btn = (Button) findViewById(R.id.fullscreen);
         final Button list_btn = (Button) findViewById(R.id.search);
+        final Button search_btn = (Button) findViewById(R.id.ysearch);
 
         full_btn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -41,7 +41,20 @@ public class MainActivity extends ActionBarActivity {
 
             }
         });
+
+        search_btn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // Perform action on click
+                Intent intent;
+                intent = new Intent(MainActivity.this,SearchActivity.class);
+//                intent.setComponent(new ComponentName(getPackageName(), "FullscreenDemoActivity"));
+                startActivity(intent);
+
+            }
+        });
     }
+
+
 
 
     @Override
