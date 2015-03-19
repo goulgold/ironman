@@ -57,7 +57,6 @@ public class FullscreenDemoActivity extends YouTubeFailureRecoveryActivity imple
     private YouTubePlayerView playerView;
     private HistogramView histoView;
     private YouTubePlayer player;
-    private Button fullscreenButton;
     private CompoundButton checkbox;
     private View otherViews;
     private View rootView;
@@ -73,7 +72,6 @@ public class FullscreenDemoActivity extends YouTubeFailureRecoveryActivity imple
         baseLayout = (LinearLayout) findViewById(R.id.flayout);
         playerView = (YouTubePlayerView) findViewById(R.id.player);
         histoView = (HistogramView) findViewById(R.id.hist);
-        fullscreenButton = (Button) findViewById(R.id.fullscreen_button);
         checkbox = (CompoundButton) findViewById(R.id.landscape_fullscreen_checkbox);
         otherViews = findViewById(R.id.other_views);
         rootView = (View) findViewById(R.id.flayout);
@@ -81,7 +79,6 @@ public class FullscreenDemoActivity extends YouTubeFailureRecoveryActivity imple
 
         checkbox.setOnCheckedChangeListener(this);
         // You can use your own button to switch to fullscreen too
-        fullscreenButton.setOnClickListener(this);
 
         playerView.initialize(DeveloperKey.DEVELOPER_KEY, this);
 
@@ -188,7 +185,6 @@ public class FullscreenDemoActivity extends YouTubeFailureRecoveryActivity imple
     private void setControlsEnabled() {
         checkbox.setEnabled(player != null
                 && getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT);
-        fullscreenButton.setEnabled(player != null);
     }
 
     @Override

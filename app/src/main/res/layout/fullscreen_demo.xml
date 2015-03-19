@@ -53,13 +53,6 @@
             android:text="@string/landscape_fullscreen"/>
 
         <Button
-            android:id="@+id/fullscreen_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="@string/enter_fullscreen"/>
-
-        <Button
             android:id="@+id/capture_buton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
