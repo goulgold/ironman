@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -91,6 +92,13 @@ public class SearchActivity extends Activity {
         });
 
         addClickListener();
+
+        WindowManager.LayoutParams lp = getWindow().getAttributes();
+        lp.screenBrightness = 0.01f;
+        getWindow().setAttributes(lp);
+
+
+
 
 
 

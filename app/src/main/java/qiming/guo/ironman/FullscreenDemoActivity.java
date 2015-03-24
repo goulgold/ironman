@@ -74,7 +74,7 @@ public class FullscreenDemoActivity extends YouTubeFailureRecoveryActivity imple
         histoView = (HistogramView) findViewById(R.id.hist);
         checkbox = (CompoundButton) findViewById(R.id.landscape_fullscreen_checkbox);
         otherViews = findViewById(R.id.other_views);
-        rootView = (View) findViewById(R.id.flayout);
+        rootView = findViewById(R.id.flayout);
         cap_button = (Button) findViewById(R.id.capture_buton);
 
         checkbox.setOnCheckedChangeListener(this);
@@ -88,10 +88,11 @@ public class FullscreenDemoActivity extends YouTubeFailureRecoveryActivity imple
                 // Perform action on click
                 rootView.setDrawingCacheEnabled(true);
                 rootView.buildDrawingCache();
+
                 Bitmap bitmap = rootView.getDrawingCache();
                 ByteBuffer buffer1 = ByteBuffer.allocate(bitmap.getHeight() * bitmap.getRowBytes());
                 bitmap.copyPixelsToBuffer(buffer1);
-                int pixel =  bitmap.getPixel(100,100);
+                // int pixel =  bitmap.getPixel(100,100);
                 histoView.invalidate();
                 histoView.setBitmap(bitmap);
                 if (bitmap != null) {

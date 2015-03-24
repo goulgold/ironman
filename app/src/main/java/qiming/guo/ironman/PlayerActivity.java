@@ -1,6 +1,7 @@
 package qiming.guo.ironman;
 
 import android.os.Bundle;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.google.android.youtube.player.YouTubeBaseActivity;
@@ -24,6 +25,10 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
 
         playerView = (YouTubePlayerView)findViewById(R.id.player_view);
         playerView.initialize(YoutubeConnector.KEY, this);
+
+        WindowManager.LayoutParams lp = getWindow().getAttributes();
+        lp.screenBrightness = 0.01f;
+        getWindow().setAttributes(lp);
     }
 
     @Override

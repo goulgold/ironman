@@ -12,7 +12,7 @@
   ||        Contact:  [If you have any question, please contact xic33@pitt.edu.]
   ++-----------------------------------------------------------------------*/
 
-package com.ece2160.server;
+package qiming.guo.ironman;
 
 import android.app.Activity;
 import android.app.AlertDialog;
