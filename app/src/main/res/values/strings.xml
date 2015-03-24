@@ -4,6 +4,9 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
 
+    <string name="ul">Upload Scheme</string>
+    <string name="dl">Download Scheme</string>
+
     <string name="youtube_api_demo">YouTube API Demos</string>
 
     <string name="videowall_demo_name">Video Wall</string>
