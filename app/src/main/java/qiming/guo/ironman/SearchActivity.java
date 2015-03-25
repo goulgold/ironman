@@ -93,14 +93,6 @@ public class SearchActivity extends Activity {
 
         addClickListener();
 
-        WindowManager.LayoutParams lp = getWindow().getAttributes();
-        lp.screenBrightness = 0.01f;
-        getWindow().setAttributes(lp);
-
-
-
-
-
 
     }
 

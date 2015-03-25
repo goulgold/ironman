@@ -40,7 +40,7 @@
         </activity>
 
         <activity android:name=".SearchActivity"
-            android:screenOrientation="landscape">
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -48,7 +48,7 @@
         </activity>
 
         <activity android:name=".PlayerActivity"
-            android:screenOrientation="landscape" />
+             />
 
     </application>
 
