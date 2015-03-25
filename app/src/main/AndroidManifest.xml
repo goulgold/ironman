@@ -2,9 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="qiming.guo.ironman" >
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -20,36 +20,42 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
-            android:label="@string/videolist_demo_name"
             android:name=".VideoListDemoActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize">
-            <meta-data android:name="@string/minVersion" android:value="13"/>
-            <meta-data android:name="@string/isLaunchableActivity" android:value="true"/>
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/videolist_demo_name" >
+            <meta-data
+                android:name="@string/minVersion"
+                android:value="13" />
+            <meta-data
+                android:name="@string/isLaunchableActivity"
+                android:value="true" />
         </activity>
-
         <activity
-            android:label="@string/fullscreen_demo_name"
             android:name=".FullscreenDemoActivity"
-            android:screenOrientation="sensor"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:theme="@style/BlackNoTitleBarTheme">
-            <meta-data android:name="@string/minVersion" android:value="8"/>
-            <meta-data android:name="@string/isLaunchableActivity" android:value="true"/>
+            android:label="@string/fullscreen_demo_name"
+            android:screenOrientation="sensor"
+            android:theme="@style/BlackNoTitleBarTheme" >
+            <meta-data
+                android:name="@string/minVersion"
+                android:value="8" />
+            <meta-data
+                android:name="@string/isLaunchableActivity"
+                android:value="true" />
         </activity>
-
-        <activity android:name=".SearchActivity"
-            >
+        <activity android:name=".SearchActivity" >
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".PlayerActivity" />
 
-        <activity android:name=".PlayerActivity"
-             />
-
+        <service
+            android:name="DimmingService" >
+        </service>
     </application>
 
 </manifest>

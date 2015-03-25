@@ -5,9 +5,11 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.Toast;
 
@@ -21,23 +23,36 @@ import org.kobjects.base64.Base64;
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.util.HashMap;
+import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.app.ActionBarActivity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.util.Log;
 
 public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer.OnInitializedListener {
 
     private YouTubePlayerView playerView;
     private SeekBar bar;
     private Context mContext;
+    private IntentFilter receiveFilter;
 
+    public static final String TimeTAG = "qiming.guo.Service";
     private static String TeamName="chm";   //change team name
-    private static String VideoName="vn1";
-    private static String VideoURL="vl1";
+    private String VideoName="vn1";
+    private String VideoURL="vl1";
     private static String VideoLgh="vh1";
     private static String OptStepLgh="oh1";
     private static String OptDimLv="ov1";
+    private EditText DimmValue;
 
     @Override
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
+
+        VideoURL = getIntent().getStringExtra("VIDEO_ID");
+        VideoName = getIntent().getStringExtra("VIDEO_TITLE");
 
         setContentView(R.layout.activity_player);
 
@@ -47,6 +62,8 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
         mContext=this;
         Button btn1=(Button)findViewById(R.id.upload);
         Button btn2=(Button)findViewById(R.id.download);
+        Button btn3=(Button)findViewById(R.id.dimming);
+        DimmValue = (EditText) findViewById (R.id.editText);
 
         bar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
@@ -81,6 +98,15 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
             public void onClick(View v) {
                 // TODO Auto-generated method stub
                 testDownload(TeamName,VideoURL);
+            }
+        });
+        btn3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                LocalBroadcastManager.getInstance(PlayerActivity.this).registerReceiver(mMessageReceiver,
+                        new IntentFilter("UpdateTime"));
+                startService(new Intent(PlayerActivity.this, DimmingService.class));
             }
         });
 
@@ -225,4 +251,16 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
         }
         return res;
     }
+
+    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            // TODO Auto-generated method stub
+            // Get extra data included in the Intent
+            Integer message = intent.getIntExtra("newtime",0);
+            Log.d(TimeTAG, "Got message: " + message);
+            Dimming((float) message);
+            DimmValue.setText(message.toString());
+        }
+    };
 }

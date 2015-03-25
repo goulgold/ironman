@@ -24,12 +24,17 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Download video"
-        android:id="@+id/downloadvideo" />
+        android:text="Start Dimming"
+        android:id="@+id/dimming" />
 
     <SeekBar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/seekBar" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/editText" />
 
 </LinearLayout>
