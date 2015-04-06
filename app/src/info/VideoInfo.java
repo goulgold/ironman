@@ -1,12 +1,11 @@
-package com.github.axet.vget.info;
+package qiming.guo.ironman.axet.vget.info;
 
 import java.net.URL;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.lang.String;
+import java.lang.Throwable;
 
-import com.github.axet.vget.vhs.VimeoParser;
-import com.github.axet.vget.vhs.YouTubeParser;
-import com.github.axet.wget.info.DownloadInfo;
-import com.github.axet.wget.info.ex.DownloadInterruptedError;
+
+import qiming.guo.ironman.axet.wget.info.DownloadInfo;
 
 public class VideoInfo {
 
@@ -27,15 +26,9 @@ public class VideoInfo {
     private int delay;
 
     /**
-     * 
-     * @param vq
-     *            max video quality to download
+     *
      * @param web
      *            user firendly url
-     * @param video
-     *            video stream url
-     * @param title
-     *            video title
      */
     public VideoInfo(URL web) {
         this.setWeb(web);

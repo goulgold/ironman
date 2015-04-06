@@ -97,7 +97,7 @@ public class FullscreenDemoActivity extends YouTubeFailureRecoveryActivity imple
                 histoView.invalidate();
                 histoView.setBitmap(bitmap);
                 if (bitmap != null) {
-                    Log.d("Capture","Captured successd.");
+                    Log.d("Capture","Captured success.");
                 } else {
                     Log.d("Capture","Captured failed.");
                 }

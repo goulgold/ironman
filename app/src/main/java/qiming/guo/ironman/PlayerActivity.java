@@ -3,6 +3,7 @@ package qiming.guo.ironman;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.content.LocalBroadcastManager;
@@ -22,14 +23,16 @@ import org.kobjects.base64.Base64;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
+import java.net.MalformedURLException;
 import java.util.HashMap;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.app.ActionBarActivity;
+
 import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.util.Log;
+import java.io.File;
+import java.net.URL;
+import qiming.guo.ironman.axet.vget.VGet;
 
 public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer.OnInitializedListener {
 
@@ -46,6 +49,58 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
     private static String OptStepLgh="oh1";
     private static String OptDimLv="ov1";
     private EditText DimmValue;
+    private EditText VideoStatus;
+
+
+    private String url = "http://www.youtube.com/watch?v=avP5d16wEp0";
+    private final static String files_PATH = Environment.getExternalStorageDirectory() + "/ironman/";
+
+    VGet vGet;
+
+    private void downloadYoutube (final String url, final String files_PATH) {
+
+        final Handler myhandler = new Handler() {
+            public void handleMessage(Message msg) {
+                if (msg.what == 1) {
+                    String notice = msg.getData().getString("info").toString();
+                    VideoStatus.setText(notice);
+                }
+            }
+
+        };
+
+        Runnable downloadVideo = new Runnable() {
+            @Override
+            public void run() {
+
+
+                try {
+                    Message msg=new Message();
+                    msg.what=1;
+                    Bundle data=new Bundle();
+                    data.putString("info","Downloading...");
+                    msg.setData(data);
+                    myhandler.sendMessage(msg);
+                    vGet = new VGet(new URL(url), new File(files_PATH));
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
+                vGet.download();
+                Message msg2=new Message();
+                msg2.what=1;
+                Bundle data=new Bundle();
+                data.putString("info","Finished.");
+                msg2.setData(data);
+                myhandler.sendMessage(msg2);
+
+            }
+        };
+
+        new Thread(downloadVideo).start();
+
+
+    }
+
 
     @Override
     protected void onCreate(Bundle bundle) {
@@ -63,7 +118,16 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
         Button btn1=(Button)findViewById(R.id.upload);
         Button btn2=(Button)findViewById(R.id.download);
         Button btn3=(Button)findViewById(R.id.dimming);
+        Button btn4=(Button)findViewById(R.id.openbtn);
         DimmValue = (EditText) findViewById (R.id.editText);
+        VideoStatus = (EditText) findViewById(R.id.editText2);
+
+
+        downloadYoutube(url,files_PATH);
+
+
+
+
 
         bar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
@@ -107,6 +171,16 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
                 LocalBroadcastManager.getInstance(PlayerActivity.this).registerReceiver(mMessageReceiver,
                         new IntentFilter("UpdateTime"));
                 startService(new Intent(PlayerActivity.this, DimmingService.class));
+            }
+        });
+        btn4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                Intent intent = new Intent(PlayerActivity.this, VideoViewActivity.class);
+                intent.putExtra("FILE",vGet.getTarget().toString());
+                startActivity(intent);
+
             }
         });
 
@@ -263,4 +337,8 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
             DimmValue.setText(message.toString());
         }
     };
+
+    private void DirectDownload (String url) {
+
+    }
 }

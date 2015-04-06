@@ -1,11 +1,11 @@
-package com.github.axet.vget.info;
+package qiming.guo.ironman.axet.vget.info;
 
 import java.net.URL;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import com.github.axet.vget.info.VideoInfo.States;
-import com.github.axet.wget.info.DownloadInfo;
-import com.github.axet.wget.info.ex.DownloadInterruptedError;
+import qiming.guo.ironman.axet.vget.info.VideoInfo.States;
+import qiming.guo.ironman.axet.wget.info.DownloadInfo;
+import qiming.guo.ironman.axet.wget.info.ex.DownloadInterruptedError;
 
 public abstract class VGetParser {
 

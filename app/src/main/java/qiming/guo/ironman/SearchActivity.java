@@ -35,6 +35,7 @@ public class SearchActivity extends Activity {
 
     private void searchOnYoutube(final String keywords){
         new Thread(){
+            @Override
             public void run(){
                 YoutubeConnector yc = new YoutubeConnector(SearchActivity.this);
                 searchResults = yc.search(keywords);

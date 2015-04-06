@@ -53,9 +53,14 @@
         </activity>
         <activity android:name=".PlayerActivity" />
 
-        <service
-            android:name="DimmingService" >
+        <service android:name=".DimmingService" >
         </service>
+
+        <activity
+            android:name=".VideoViewActivity"
+            android:screenOrientation = "landscape"
+             >
+        </activity>
     </application>
 
 </manifest>

@@ -23,6 +23,12 @@ android {
         targetCompatibility JavaVersion.VERSION_1_6
     }
 
+    packagingOptions {
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+    }
+
+
 }
 
 dependencies {
