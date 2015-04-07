@@ -25,7 +25,8 @@ public class DimmingService extends Service {
     private Time mTime = new Time();
     private Context ctx;
     private Handler mHandler = new Handler();
-    public static final int INTERVAL = 1 * 1000;
+    public static final int INTERVAL = 1 * 200;
+    private String[] dimmingArray;
 
     public DimmingService() {
     }

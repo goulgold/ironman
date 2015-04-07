@@ -20,24 +20,31 @@ import java.util.List;
 public class DimmingFileOperator {
 
     private File dimmingfile;
-    private String VideoName;
+    private String VideoID;
     private String TeamName;
     private List<String> dimmingsch = new ArrayList<String>();
+    FileReader reader;
+    JSONParser parser;
+    JSONObject jsonObject;
+
 
     public DimmingFileOperator(String arg){
-        this.VideoName = arg;
+        this.VideoID = arg;
         // TODO: There is a existed dimming file or not.
     }
-    public DimmingFileOperator(File arg) {
+    public DimmingFileOperator(File arg) throws IOException, ParseException {
+
         this.dimmingfile = arg;
+        reader = new FileReader(dimmingfile);
+        parser = new JSONParser();
+        Object obj = parser.parse(reader);
+        jsonObject = (JSONObject) obj;
+        TeamName = (String) jsonObject.get("TeamName");
+
     }
 
     public List<String> getDimmingScheme() throws IOException, ParseException {
-        FileReader reader = new FileReader(dimmingfile);
-        JSONParser parser = new JSONParser();
-        Object obj = parser.parse(reader);
-        JSONObject jsonObject = (JSONObject) obj;
-        TeamName = (String) jsonObject.get("TeamName");
+
         JSONArray dimmingList = (JSONArray) jsonObject.get("DimmingScheme");
         Iterator<String> iterator = dimmingList.iterator();
         while (iterator.hasNext()) {

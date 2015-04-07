@@ -54,25 +54,29 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
     private static String OptDimLv="ov1";
     private EditText DimmValue;
     private EditText VideoStatus;
-    private DimmingFileOperator thisdm;
 
 
+
+    private String pre_url = "http://www.youtube.com/watch?v=";
     private String url = "http://www.youtube.com/watch?v=avP5d16wEp0";
     private final static String files_PATH = Environment.getExternalStorageDirectory() + "/ironman/";
 
     VGet vGet;
+    private DimmingCal dimmingCal;
+
+    final Handler myhandler = new Handler() {
+        public void handleMessage(Message msg) {
+            if (msg.what == 1) {
+                String notice = msg.getData().getString("info").toString();
+                VideoStatus.setText(notice);
+            }
+        }
+
+    };
 
     private void downloadYoutube (final String url, final String files_PATH) {
 
-        final Handler myhandler = new Handler() {
-            public void handleMessage(Message msg) {
-                if (msg.what == 1) {
-                    String notice = msg.getData().getString("info").toString();
-                    VideoStatus.setText(notice);
-                }
-            }
 
-        };
 
         Runnable downloadVideo = new Runnable() {
             @Override
@@ -81,7 +85,7 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
                     Message msg=new Message();
                     msg.what=1;
                     Bundle data=new Bundle();
-                    data.putString("info","Downloading...");
+                    data.putString("info","Initializing...");
                     msg.setData(data);
                     myhandler.sendMessage(msg);
                     vGet = new VGet(new URL(url), new File(files_PATH));
@@ -89,13 +93,28 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
                     e.printStackTrace();
                 }
                 // DEBUG CODE
-//                vGet.download();
+                vGet.download();
                 Message msg2=new Message();
                 msg2.what=1;
                 Bundle data=new Bundle();
-                data.putString("info","Finished.");
+                data.putString("info", vGet.getVideo().getState().toString());
                 msg2.setData(data);
                 myhandler.sendMessage(msg2);
+
+                try {
+                    // DEBUG
+                    dimmingCal = new DimmingCal(vGet.getVideo().getVideoID());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+/*                Message msg3 = new Message();
+                msg3.what=1;
+                data.putString("info", "DimmingCal Completed.");
+                msg3.setData(data);
+                myhandler.sendMessage(msg3);*/
 
             }
         };
@@ -127,16 +146,9 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
         VideoStatus = (EditText) findViewById(R.id.editText2);
 
 
-        downloadYoutube(url,files_PATH);
+        downloadYoutube(pre_url + VideoURL,files_PATH);
 
-        thisdm = new DimmingFileOperator(new File(files_PATH + "dimm.txt"));
-        try {
-            List<String> test = thisdm.getDimmingScheme();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+
 
 
         bar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -187,7 +199,7 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
                 // TODO Auto-generated method stub
                 Intent intent = new Intent(PlayerActivity.this, VideoViewActivity.class);
                 // DEBUG CODE
-                intent.putExtra("FILE",files_PATH + "test.mp4");
+                intent.putExtra("VideoID", vGet.getVideo().getVideoID());
 //                intent.putExtra("FILE",vGet.getTarget().toString());
                 startActivity(intent);
 

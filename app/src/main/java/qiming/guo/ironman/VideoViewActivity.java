@@ -1,5 +1,9 @@
 package qiming.guo.ironman;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
 import java.util.ResourceBundle.Control;
 
 import android.app.Activity;
@@ -8,6 +12,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -17,14 +22,25 @@ import android.widget.EditText;
 import android.widget.MediaController;
 import android.widget.VideoView;
 
+import com.thoughtworks.xstream.alias.ClassMapper;
+
+import org.json.simple.parser.ParseException;
+
 public class VideoViewActivity extends Activity {
     VideoView video_player_view;
     DisplayMetrics dm;
     SurfaceView sur_View;
     MediaController media_Controller;
-    private String file_PATH;
+    private final static String dir_PATH = Environment.getExternalStorageDirectory() + "/ironman/";
     public static final String TimeTAG = "qiming.guo.Service";
     private EditText DimmingInfo;
+    private DimmingFileOperator thisdm;
+    private String video_PATH;
+    private String dimm_PATH;
+    private String VideoID;
+    List<String> dimming;
+    HashMap<Integer, Integer> dimmingmap = new HashMap<Integer, Integer>();
+
 
 
     /**
@@ -33,16 +49,24 @@ public class VideoViewActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
-
-        file_PATH = getIntent().getStringExtra("FILE");
+        // DEBUG CODE
+        VideoID = getIntent().getStringExtra("VideoID");
+        video_PATH = dir_PATH + VideoID + ".mp4";
+        dimm_PATH = dir_PATH + VideoID + ".txt";
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_view);
 
         DimmingInfo = (EditText)findViewById(R.id.editText3);
 
-        StartDimming();
-
         getInit();
+
+        InputDimmingFile.run();
+
+        StartDimmingSevice();
+
+
+
+
     }
 
     public void getInit() {
@@ -56,20 +80,35 @@ public class VideoViewActivity extends Activity {
 //        video_player_view.setMinimumWidth(width);
 //        video_player_view.setMinimumHeight(height);
         video_player_view.setMediaController(media_Controller);
-        video_player_view.setVideoPath(file_PATH);
+        video_player_view.setVideoPath(video_PATH);
         video_player_view.start();
     }
 
-    private void StartDimming() {
+    private void StartDimmingSevice() {
         LocalBroadcastManager.getInstance(VideoViewActivity.this).registerReceiver(mMessageReceiver,
                 new IntentFilter("UpdateTime"));
-        startService(new Intent(VideoViewActivity.this, DimmingService.class));
+        Intent mIntent = new Intent(VideoViewActivity.this, DimmingService.class);
+        startService(mIntent);
+
     }
 
-    private void Dimming(float dimmingValue) {
+    private void Dimming(float time) {
+
+        Integer currentPosition = video_player_view.getCurrentPosition();
+        Integer Duration = video_player_view.getDuration();
+        Integer currentSec = currentPosition / 1000;
+        int dimmingValue;
+        Integer searchValue = dimmingmap.get(currentSec);
+        if (searchValue != null) {
+            dimmingValue = searchValue;
+        }
+        else {
+            dimmingValue = 100;
+        }
+        Log.d("Position",currentPosition.toString() +"|" + searchValue.toString());
         WindowManager.LayoutParams lp = getWindow().getAttributes();
-        float thisValue = dimmingValue * lp.BRIGHTNESS_OVERRIDE_FULL;
-        lp.screenBrightness = dimmingValue;
+        float thisValue = (float) dimmingValue / 100;
+        lp.screenBrightness = thisValue;
         getWindow().setAttributes(lp);
     }
 
@@ -83,6 +122,40 @@ public class VideoViewActivity extends Activity {
             Dimming((float) message);
             DimmingInfo.setText(message.toString());
         }
+    };
+
+    Runnable InputDimmingFile = new Runnable() {
+        @Override
+        public void run() {
+
+
+
+            try {
+                thisdm = new DimmingFileOperator(new File(dimm_PATH));
+                // DEBUG CODE
+                //thisdm = new DimmingFileOperator(new File(dimm_PATH));
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            try {
+                dimming = thisdm.getDimmingScheme();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            for (String line : dimming) {
+                String[] temp = line.split("\\|");
+                dimmingmap.put( Integer.parseInt(temp[0]), Integer.parseInt(temp[1]) );
+            }
+
+        }
+
+
     };
 }
 
