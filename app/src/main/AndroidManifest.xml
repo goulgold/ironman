@@ -31,19 +31,6 @@
                 android:name="@string/isLaunchableActivity"
                 android:value="true" />
         </activity>
-        <activity
-            android:name=".FullscreenDemoActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:label="@string/fullscreen_demo_name"
-            android:screenOrientation="sensor"
-            android:theme="@style/BlackNoTitleBarTheme" >
-            <meta-data
-                android:name="@string/minVersion"
-                android:value="8" />
-            <meta-data
-                android:name="@string/isLaunchableActivity"
-                android:value="true" />
-        </activity>
         <activity android:name=".SearchActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -58,7 +45,6 @@
 
         <activity
             android:name=".VideoViewActivity"
-            android:screenOrientation = "landscape"
              >
         </activity>
     </application>

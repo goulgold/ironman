@@ -19,10 +19,12 @@ import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerView;
 
+import org.json.simple.parser.ParseException;
 import org.kobjects.base64.Base64;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.HashMap;
 
@@ -32,6 +34,8 @@ import android.content.IntentFilter;
 import android.util.Log;
 import java.io.File;
 import java.net.URL;
+import java.util.List;
+
 import qiming.guo.ironman.axet.vget.VGet;
 
 public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer.OnInitializedListener {
@@ -50,6 +54,7 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
     private static String OptDimLv="ov1";
     private EditText DimmValue;
     private EditText VideoStatus;
+    private DimmingFileOperator thisdm;
 
 
     private String url = "http://www.youtube.com/watch?v=avP5d16wEp0";
@@ -72,8 +77,6 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
         Runnable downloadVideo = new Runnable() {
             @Override
             public void run() {
-
-
                 try {
                     Message msg=new Message();
                     msg.what=1;
@@ -85,7 +88,8 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
                 }
-                vGet.download();
+                // DEBUG CODE
+//                vGet.download();
                 Message msg2=new Message();
                 msg2.what=1;
                 Bundle data=new Bundle();
@@ -125,8 +129,14 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
 
         downloadYoutube(url,files_PATH);
 
-
-
+        thisdm = new DimmingFileOperator(new File(files_PATH + "dimm.txt"));
+        try {
+            List<String> test = thisdm.getDimmingScheme();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
 
         bar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -168,9 +178,7 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
-                LocalBroadcastManager.getInstance(PlayerActivity.this).registerReceiver(mMessageReceiver,
-                        new IntentFilter("UpdateTime"));
-                startService(new Intent(PlayerActivity.this, DimmingService.class));
+
             }
         });
         btn4.setOnClickListener(new View.OnClickListener() {
@@ -178,7 +186,9 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
             public void onClick(View v) {
                 // TODO Auto-generated method stub
                 Intent intent = new Intent(PlayerActivity.this, VideoViewActivity.class);
-                intent.putExtra("FILE",vGet.getTarget().toString());
+                // DEBUG CODE
+                intent.putExtra("FILE",files_PATH + "test.mp4");
+//                intent.putExtra("FILE",vGet.getTarget().toString());
                 startActivity(intent);
 
             }
@@ -201,12 +211,7 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
         }
     }
 
-    private void Dimming(float dimmingValue) {
-        WindowManager.LayoutParams lp = getWindow().getAttributes();
-        float thisValue = dimmingValue * lp.BRIGHTNESS_OVERRIDE_FULL;
-        lp.screenBrightness = dimmingValue;
-        getWindow().setAttributes(lp);
-    }
+
 
     private void testUpload(String fileName){
         try{
@@ -326,19 +331,14 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
         return res;
     }
 
-    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            // TODO Auto-generated method stub
-            // Get extra data included in the Intent
-            Integer message = intent.getIntExtra("newtime",0);
-            Log.d(TimeTAG, "Got message: " + message);
-            Dimming((float) message);
-            DimmValue.setText(message.toString());
-        }
-    };
 
-    private void DirectDownload (String url) {
-
+    private void Dimming(float dimmingValue) {
+        WindowManager.LayoutParams lp = getWindow().getAttributes();
+        float thisValue = dimmingValue * lp.BRIGHTNESS_OVERRIDE_FULL;
+        lp.screenBrightness = dimmingValue;
+        getWindow().setAttributes(lp);
     }
+
+
+
 }

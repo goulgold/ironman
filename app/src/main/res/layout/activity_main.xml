@@ -9,32 +9,10 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Video List"
-        android:id="@+id/search"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="135dp" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Histogram"
-        android:id="@+id/fullscreen"
-        android:layout_centerVertical="true"
-        android:layout_alignLeft="@+id/search"
-        android:layout_alignStart="@+id/search"
-        android:layout_alignRight="@+id/search"
-        android:layout_alignEnd="@+id/search" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:text="SEARCH"
         android:id="@+id/ysearch"
         android:layout_marginTop="54dp"
-        android:layout_below="@+id/fullscreen"
-        android:layout_alignLeft="@+id/fullscreen"
-        android:layout_alignStart="@+id/fullscreen"
-        android:layout_alignRight="@+id/fullscreen"
-        android:layout_alignEnd="@+id/fullscreen" />
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

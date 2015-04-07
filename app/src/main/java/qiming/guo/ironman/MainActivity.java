@@ -16,31 +16,9 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        final Button full_btn = (Button) findViewById(R.id.fullscreen);
-        final Button list_btn = (Button) findViewById(R.id.search);
+
         final Button search_btn = (Button) findViewById(R.id.ysearch);
 
-        full_btn.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                // Perform action on click
-                Intent intent;
-                intent = new Intent(MainActivity.this,FullscreenDemoActivity.class);
-//                intent.setComponent(new ComponentName(getPackageName(), "FullscreenDemoActivity"));
-                startActivity(intent);
-
-            }
-        });
-
-        list_btn.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                // Perform action on click
-                Intent intent;
-                intent = new Intent(MainActivity.this,VideoListDemoActivity.class);
-//                intent.setComponent(new ComponentName(getPackageName(), "FullscreenDemoActivity"));
-                startActivity(intent);
-
-            }
-        });
 
         search_btn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
