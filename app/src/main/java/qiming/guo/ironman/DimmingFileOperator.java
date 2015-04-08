@@ -27,11 +27,6 @@ public class DimmingFileOperator {
     JSONParser parser;
     JSONObject jsonObject;
 
-
-    public DimmingFileOperator(String arg){
-        this.VideoID = arg;
-        // TODO: There is a existed dimming file or not.
-    }
     public DimmingFileOperator(File arg) throws IOException, ParseException {
 
         this.dimmingfile = arg;
