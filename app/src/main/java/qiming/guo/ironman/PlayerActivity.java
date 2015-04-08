@@ -64,15 +64,7 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
     VGet vGet;
     private DimmingCal dimmingCal;
 
-    final Handler myhandler = new Handler() {
-        public void handleMessage(Message msg) {
-            if (msg.what == 1) {
-                String notice = msg.getData().getString("info").toString();
-                VideoStatus.setText(notice);
-            }
-        }
-
-    };
+    final Handler myhandler = new Handler();
 
     private void downloadYoutube (final String url, final String files_PATH) {
 
@@ -82,24 +74,26 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
             @Override
             public void run() {
                 try {
-                    Message msg=new Message();
-                    msg.what=1;
-                    Bundle data=new Bundle();
-                    data.putString("info","Initializing...");
-                    msg.setData(data);
-                    myhandler.sendMessage(msg);
+                    myhandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            VideoStatus.setText("Initializing..");
+                        }
+                    });
+
                     vGet = new VGet(new URL(url), new File(files_PATH));
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
                 }
                 // DEBUG CODE
                 vGet.download();
-                Message msg2=new Message();
-                msg2.what=1;
-                Bundle data=new Bundle();
-                data.putString("info", vGet.getVideo().getState().toString());
-                msg2.setData(data);
-                myhandler.sendMessage(msg2);
+
+                myhandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        VideoStatus.setText("Downloaded.");
+                    }
+                });
 
                 try {
                     // DEBUG
@@ -109,6 +103,13 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
+
+                myhandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        VideoStatus.setText("DimmingFile Created.");
+                    }
+                });
 
 /*                Message msg3 = new Message();
                 msg3.what=1;
@@ -142,7 +143,6 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
         Button btn2=(Button)findViewById(R.id.download);
         Button btn3=(Button)findViewById(R.id.dimming);
         Button btn4=(Button)findViewById(R.id.openbtn);
-        DimmValue = (EditText) findViewById (R.id.editText);
         VideoStatus = (EditText) findViewById(R.id.editText2);
 
 

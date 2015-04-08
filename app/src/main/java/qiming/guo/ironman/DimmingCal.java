@@ -1,5 +1,6 @@
 package qiming.guo.ironman;
 
+import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.os.Environment;
 
@@ -42,10 +43,9 @@ public class DimmingCal {
     private DimmingFileOperator DimmingAlgorithm (String VideoID) throws IOException, ParseException {
         //:TODO dimming algorithm
         videofile = new File(dir_PATH + VideoID + ".mp4");
-        MediaPlayer thisvideo = new MediaPlayer();
+        MediaMetadataRetriever thisvideo = new MediaMetadataRetriever();
         thisvideo.setDataSource(videofile.toString());
-        thisvideo.prepare();
-        Integer duration = thisvideo.getDuration();
+        Integer duration = Integer.parseInt(thisvideo.extractMetadata(thisvideo.METADATA_KEY_DURATION));
         duration = duration / 1000;
         JSONObject obj = new JSONObject();
         obj.put("TeamName", "Ironman");
