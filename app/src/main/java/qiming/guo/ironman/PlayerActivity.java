@@ -19,6 +19,7 @@ import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerView;
 
+import org.jcodec.api.JCodecException;
 import org.json.simple.parser.ParseException;
 import org.kobjects.base64.Base64;
 
@@ -41,7 +42,6 @@ import qiming.guo.ironman.axet.vget.VGet;
 public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer.OnInitializedListener {
 
     private YouTubePlayerView playerView;
-    private SeekBar bar;
     private Context mContext;
     private IntentFilter receiveFilter;
 
@@ -64,7 +64,13 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
     VGet vGet;
     private DimmingCal dimmingCal;
 
-    final Handler myhandler = new Handler();
+    final Handler myhandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            VideoStatus.setText(msg.getData().getString("message"));
+        }
+    };
 
     private void downloadYoutube (final String url, final String files_PATH) {
 
@@ -74,12 +80,12 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
             @Override
             public void run() {
                 try {
-                    myhandler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            VideoStatus.setText("Initializing..");
-                        }
-                    });
+                    Message msgObj = myhandler.obtainMessage();
+                    Bundle b= new Bundle();
+                    b.putString("message", "Initializing.");
+                    msgObj.setData(b);
+                    myhandler.sendMessage(msgObj);
+
 
                     vGet = new VGet(new URL(url), new File(files_PATH));
                 } catch (MalformedURLException e) {
@@ -88,19 +94,20 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
                 // DEBUG CODE
                 vGet.download();
 
-                myhandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        VideoStatus.setText("Downloaded.");
-                    }
-                });
+                Message msgObj = myhandler.obtainMessage();
+                Bundle b= new Bundle();
+                b.putString("message", "Downloaded.");
+                msgObj.setData(b);
+                myhandler.sendMessage(msgObj);
 
                 try {
                     // DEBUG
-                    dimmingCal = new DimmingCal(vGet.getVideo().getVideoID());
+                    dimmingCal = new DimmingCal(vGet.getVideo().getVideoID(), myhandler, mContext);
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (ParseException e) {
+                    e.printStackTrace();
+                } catch (JCodecException e) {
                     e.printStackTrace();
                 }
 
@@ -136,40 +143,16 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
         setContentView(R.layout.activity_player);
 
         playerView = (YouTubePlayerView)findViewById(R.id.player_view);
-        bar = (SeekBar)findViewById(R.id.seekBar);
         playerView.initialize(YoutubeConnector.KEY, this);
         mContext=this;
         Button btn1=(Button)findViewById(R.id.upload);
         Button btn2=(Button)findViewById(R.id.download);
-        Button btn3=(Button)findViewById(R.id.dimming);
         Button btn4=(Button)findViewById(R.id.openbtn);
+        Button btn5=(Button)findViewById(R.id.opengl);
         VideoStatus = (EditText) findViewById(R.id.editText2);
 
 
         downloadYoutube(pre_url + VideoURL,files_PATH);
-
-
-
-
-        bar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                float max = seekBar.getMax();
-                Dimming((float) (progress/max));
-
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
-            }
-        });
 
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -186,13 +169,6 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
                 testDownload(TeamName,VideoURL);
             }
         });
-        btn3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // TODO Auto-generated method stub
-
-            }
-        });
         btn4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -201,6 +177,15 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
                 // DEBUG CODE
                 intent.putExtra("VideoID", vGet.getVideo().getVideoID());
 //                intent.putExtra("FILE",vGet.getTarget().toString());
+                startActivity(intent);
+
+            }
+        });
+        btn5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                Intent intent = new Intent(PlayerActivity.this, GLSurfaceViewActivity.class);
                 startActivity(intent);
 
             }
@@ -291,6 +276,7 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
                     HashMap<String, String> resmap=tranStr(resStr);
                     String OptPath=resmap.get("OptPath");
                     new AlertDialog.Builder(mContext).setTitle("Download Information").setMessage(resStr)
+
                             .setPositiveButton("OK", null).show();
                     if(OptPath!=null && OptPath.length()>1) {
                         Handler myHandler2 = new Handler() {

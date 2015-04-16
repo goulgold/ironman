@@ -1,23 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical">
-
-    <FrameLayout
-        android:id="@+id/video_frame"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
-
         <VideoView
             android:id="@+id/video_player_view"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent" />
+            android:layout_height="195dp" />
 
         <EditText
-            android:layout_width="wrap_content"
+            android:layout_width="414dp"
             android:layout_height="wrap_content"
             android:id="@+id/editText3"
-            android:layout_gravity="center_horizontal|top" />
-    </FrameLayout>
-</RelativeLayout>
+            />
+</LinearLayout>

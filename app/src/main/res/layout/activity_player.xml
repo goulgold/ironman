@@ -24,22 +24,21 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Start Dimming"
-        android:id="@+id/dimming" />
+        android:text="Open"
+        android:id="@+id/openbtn" />
+
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Open"
-        android:id="@+id/openbtn" />
-
-    <SeekBar
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/seekBar" />
-
+        android:text="OpenGL Play"
+        android:id="@+id/opengl" />
 
     <EditText
+        android:clickable="false"
+        android:cursorVisible="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/editText2" />

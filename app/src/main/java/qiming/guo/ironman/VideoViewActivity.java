@@ -97,22 +97,24 @@ public class VideoViewActivity extends Activity {
         Integer currentPosition = video_player_view.getCurrentPosition();
         Integer Duration = video_player_view.getDuration();
         Integer currentSec = currentPosition / 1000;
-        int dimmingValue;
-        Integer searchValue = dimmingmap.get(currentSec);
+        Integer dimmingValue;
+        Integer searchValue = dimmingmap.get(currentSec * 1000);
         if (searchValue != null) {
             dimmingValue = searchValue;
         }
         else {
             dimmingValue = 100;
         }
-        Log.d("Position",currentPosition.toString() +"|" + searchValue.toString());
+        Log.d("Position",currentPosition.toString() +"|" + dimmingValue.toString());
         WindowManager.LayoutParams lp = getWindow().getAttributes();
         float thisValue = (float) dimmingValue / 100;
         lp.screenBrightness = thisValue;
         getWindow().setAttributes(lp);
+        String currentstring = Double.toString( (double)currentPosition / 1000);
+        DimmingInfo.setText("time:" + currentstring + "backlight:" + dimmingValue.toString());
     }
 
-    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+    private BroadcastReceiver mMessageReceiver   = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             // TODO Auto-generated method stub
@@ -120,7 +122,6 @@ public class VideoViewActivity extends Activity {
             Integer message = intent.getIntExtra("newtime",0);
             Log.d(TimeTAG, "Got message: " + message);
             Dimming((float) message);
-            DimmingInfo.setText(message.toString());
         }
     };
 

@@ -20,17 +20,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".VideoListDemoActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="@string/videolist_demo_name" >
-            <meta-data
-                android:name="@string/minVersion"
-                android:value="13" />
-            <meta-data
-                android:name="@string/isLaunchableActivity"
-                android:value="true" />
-        </activity>
         <activity android:name=".SearchActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -39,6 +28,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".PlayerActivity" />
+        <activity android:name=".GLSurfaceViewActivity" />
 
         <service android:name=".DimmingService" >
         </service>
